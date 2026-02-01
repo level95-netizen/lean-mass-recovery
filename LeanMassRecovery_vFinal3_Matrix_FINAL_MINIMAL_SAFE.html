@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Lean Mass Recovery vFinal.3 (Alcohol Integrated)</title>
+  <style>
+    :root{
+      --bg:#f6f7fb; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
+      --accent:#2563eb; --accentSoft:#eff6ff;
+      --warn:#b45309; --warnSoft:#fffbeb;
+      --bad:#b91c1c; --badSoft:#fef2f2;
+      --ok:#047857; --okSoft:#ecfdf5;
+      --shadow:0 8px 24px rgba(17,24,39,0.08);
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);}
+    header{padding:18px 16px 12px;position:sticky;top:0;background:rgba(246,247,251,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line);z-index:10;}
+    h1{font-size:16px;margin:0 0 6px;font-weight:900;letter-spacing:-0.2px;}
+    .sub{font-size:12px;color:var(--muted);line-height:1.55;}
+    main{padding:12px 16px 120px;}
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
+    .card h2{font-size:14px;margin:0 0 10px;font-weight:900;}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start;}
+
+    label{font-size:12px;color:var(--muted);display:block;margin:0 0 6px;}
+    select,input[type="text"],input[type="date"]{
+      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--text);
+      font-size:15px;outline:none;
+    }
+    select:focus,input:focus{border-color:rgba(37,99,235,0.35);box-shadow:0 0 0 4px rgba(37,99,235,0.12);}
+
+    .btn{appearance:none;border:1px solid var(--line);background:#fff;color:var(--text);padding:11px 12px;border-radius:14px;font-size:14px;font-weight:900;}
+    .btn.primary{border-color:rgba(37,99,235,0.35);background:var(--accentSoft);color:var(--accent);}
+    .btn.danger{border-color:rgba(185,28,28,0.35);background:var(--badSoft);color:var(--bad);}
+    .btn:active{transform:translateY(1px);}
+
+    .split{height:1px;background:var(--line);margin:12px 0;}
+    .eventHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+    .eventTitle{font-weight:900;font-size:15px;}
+    .tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);border:1px solid var(--line);padding:4px 8px;border-radius:999px;background:#fff;}
+
+    .callout{border-radius:14px;border:1px solid var(--line);padding:12px;background:#fff;}
+    .qTitle{font-size:13px;font-weight:900;margin:0 0 6px;letter-spacing:-0.2px;}
+    .qHint{margin:0 0 8px;font-size:12px;color:var(--muted);line-height:1.55;}
+
+    .chip{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff;min-width:220px;}
+    input[type="checkbox"]{transform:scale(1.15);}
+
+    .resultBox{display:grid;gap:10px;}
+    .kpi{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .kpi span{font-size:12px;color:var(--muted);}
+    .kpi strong{font-size:16px;font-weight:900;}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+
+    .zoneBadge{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;font-weight:900;font-size:13px;border:1px solid var(--line);background:#fff;}
+    .z1,.z2{color:var(--ok);background:var(--okSoft);border-color:rgba(4,120,87,0.18);}
+    .z3{color:#065f46;background:#ecfdf5;border-color:rgba(6,95,70,0.16);}
+    .z4{color:var(--warn);background:var(--warnSoft);border-color:rgba(180,83,9,0.18);}
+    .z5,.z6,.z7{color:var(--bad);background:var(--badSoft);border-color:rgba(185,28,28,0.18);}
+
+    .footer{position:fixed;left:0;right:0;bottom:0;padding:10px 16px 14px;background:rgba(246,247,251,0.92);backdrop-filter:saturate(1.2) blur(10px);border-top:1px solid var(--line);z-index:20;}
+    .footer .row{justify-content:space-between;}
+
+    .hide{display:none;}
+    .warnBox{border-color:rgba(180,83,9,0.22);background:var(--warnSoft);color:#7c2d12;}
+    .badBox{border-color:rgba(185,28,28,0.22);background:var(--badSoft);color:#7f1d1d;}
+    .okBox{border-color:rgba(4,120,87,0.22);background:var(--okSoft);color:#064e3b;}
+
+    .miniTable{width:100%;border-collapse:collapse;font-size:12px;}
+    .miniTable td{padding:6px 0;border-bottom:1px dashed rgba(229,231,235,0.9);}
+    .miniTable td:last-child{text-align:right;font-weight:900;}
+    .pill{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:11px;color:var(--muted);}
+  
+  #loadBtn, #exportBtn { display:none !important; }
+  #quickBtn { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>린매스 복구 계산기 vFinal.3 — Alcohol Integrated</h1>
+  <div class="sub">변경 즉시 자동 계산/자동 갱신. 술(A/Q) 포함 시 최종 조치는 “매트릭스” 기준으로 단 하나만 출력됩니다.</div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="row">
+      <div style="flex:1; min-width:180px;">
+        <label>날짜</label>
+        <input id="dateInput" type="date" />
+        <div class="qHint">이 날짜 기준으로 이벤트를 저장/불러옵니다.</div>
+      </div>
+      <div style="flex:1; min-width:240px;">
+        <label>오늘 상황 메모(선택)</label>
+        <input id="dayNote" type="text" placeholder="예: 회식, 친구 모임, 야식 등 (기록용)" />
+      </div>
+    </div>
+    <div class="split"></div>
+    <div class="row">
+      <button class="btn primary" id="addEventBtn">+ 음식(이벤트) 추가</button>
+      <button class="btn" id="saveBtn">저장</button>
+      <button class="btn danger" id="clearDayBtn">이 날짜 데이터 삭제</button>
+    </div>
+    <div class="qHint" style="margin-top:10px;">
+      <b>규칙:</b> 같은 자리에서 여러 음식을 먹었으면 <b>음식별로 이벤트 분리</b>.<br/>
+      <b>액상:</b> 쉐이크/음료/액상당은 “액상” 체크 시 <b>섭취량 1단계 상향</b> 적용.
+    </div>
+  </div>
+
+  <div id="eventsWrap" class="grid" style="margin-top:14px;"></div>
+
+  <div class="card" style="margin-top:14px;">
+    <h2>오늘 결과</h2>
+    <div class="resultBox">
+      <div class="kpi"><span>Σ EventScore</span><strong class="mono" id="sumOut">0.00</strong></div>
+      <div class="kpi"><span>OverlapPenalty</span><strong class="mono" id="penOut">0.00</strong></div>
+      <div class="kpi"><span>DailyLoad</span><strong class="mono" id="dlOut">0.00</strong></div>
+      <div class="kpi"><span>Zone</span><strong id="zoneOut" class="zoneBadge z1">Zone 1</strong></div>
+      <div class="split"></div>
+      <div id="protocolOut" class="callout okBox"></div>
+    </div>
+  </div>
+</main>
+
+<div class="footer">
+  <div class="row">
+    <button class="btn" id="loadBtn">불러오기</button>
+    <button class="btn primary" id="quickBtn">빠른 갱신</button>
+        <button class="btn primary" id="resetBtn">전체 초기화</button>
+    <button class="btn" id="exportBtn">내보내기</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const BASE = { B0:1, B1:3, B2:3 };
+  const REFINE = { R0:0, R1:1, R2:2, R3:3 };
+  const COOK = { C0:0, C1:1, C2:2, C3:3 };
+  const SAUCE_AMOUNT = { L1:1, L2:2, L3:3 };
+  const BROTH = { Bro0:0, Bro1:1, Bro2:2 };
+
+  const VM = { V0:0.85, V1:1.0, V2:1.2, V3:1.4 };
+  const TM = { T0:1.0, T1:1.1, T2:1.25, T3:1.4 };
+  const PM = { P0:1.0, P1:1.15 };
+  const ALCOHOL_KIND = { A0:1.0, A1:1.1, A2:1.2, A3:1.25 };
+  const ALCOHOL_QTY  = { Q0:1.0, Q1:1.1, Q2:1.25, Q3:1.4 };
+
+  const ZONES = [
+    {z:1, min:0, max:15},
+    {z:2, min:15, max:18},
+    {z:3, min:18, max:32},
+    {z:4, min:32, max:38},
+    {z:5, min:38, max:44},
+    {z:6, min:44, max:50},
+    {z:7, min:50, max:138},
+  ];
+
+  const UI = {
+    purpose: [
+      ["P0", `식사 대체 (×${PM.P0}) — 이 음식으로 끼니 끝`],
+      ["P1", `추가 섭취 (×${PM.P1}) — 식사 후 간식/추가`],
+    ],
+    base: [
+      ["B0", `단백질 기반 (+${BASE.B0}) — 닭/고기/계란/단백질 쉐이크`],
+      ["B1", `탄수 기반 (+${BASE.B1}) — 밥/빵/면/도우/시리얼`],
+      ["B2", `지방 기반 (+${BASE.B2}) — 크림/치즈/기름 중심`],
+    ],
+    refine: [
+      ["R0", `저정제 (+${REFINE.R0}) — 잡곡밥/현미/오트/고구마`],
+      ["R1", `중간 (+${REFINE.R1}) — 통밀빵/현미+백미 섞음`],
+      ["R2", `정제 (+${REFINE.R2}) — 흰쌀/식빵/면/피자도우`],
+      ["R3", `초정제·당 중심 (+${REFINE.R3}) — 도넛/케이크/설탕음료/액상당`],
+    ],
+    cooking: [
+      ["C0", `생/삶음/찜/구이 (+${COOK.C0})`],
+      ["C1", `볶음 (+${COOK.C1})`],
+      ["C2", `튀김(옷 얇음) (+${COOK.C2})`],
+      ["C3", `튀김(옷 두꺼움) (+${COOK.C3})`],
+    ],
+    sauceAmt: [
+      ["L1", `소량 (×1) — 찍먹/살짝 묻음`],
+      ["L2", `중간 (×2) — 확실히 묻음`],
+      ["L3", `많음 (×3) — 범벅/핵심`],
+    ],
+    sweet: [
+      [0,"0 (+0) 거의 없음"], [1,"1 (+1) 약간 달다"], [2,"2 (+2) 확실히 달다"], [3,"3 (+3) 디저트급/강한 단맛"]
+    ],
+    salty: [
+      [0,"0 (+0) 싱겁거나 보통"], [1,"1 (+1) 약간 짭짤"], [2,"2 (+2) 확실히 짜다"], [3,"3 (+3) 고염/짜서 물 땡김"]
+    ],
+    broth: [
+      ["Bro0",`국물 없음 (+${BROTH.Bro0})`],
+      ["Bro1",`국물 약간 (+${BROTH.Bro1})`],
+      ["Bro2",`국물 많음/국물 위주 (+${BROTH.Bro2})`],
+    ],
+    volume: [
+      ["V0", `0.5인분 이하 (×${VM.V0}) — 두세 입/절반 이하`],
+      ["V1", `1.0인분 (×${VM.V1}) — 보통 1인분`],
+      ["V2", `1.5인분 (×${VM.V2}) — 1인분+반`],
+      ["V3", `2.0인분 이상 (×${VM.V3}) — 2인분급/많이 먹음`],
+    ],
+    timing: [
+      ["T0", `기상~14시 (×${TM.T0})`],
+      ["T1", `14~19시 (×${TM.T1})`],
+      ["T2", `19시~취침 3시간 전 (×${TM.T2})`],
+      ["T3", `취침 3시간 이내/야식 (×${TM.T3})`],
+    ],
+    alcKind: [
+      ["A0", `없음 (×${ALCOHOL_KIND.A0})`],
+      ["A1", `발효주 (×${ALCOHOL_KIND.A1}) — 맥주/막걸리/와인`],
+      ["A2", `증류주 (×${ALCOHOL_KIND.A2}) — 소주/위스키/보드카`],
+      ["A3", `당류혼합주 (×${ALCOHOL_KIND.A3}) — 칵테일/달달한 술/RTD`],
+    ],
+    alcQty: [
+      ["Q0", `없음 (×${ALCOHOL_QTY.Q0})`],
+      ["Q1", `적음 (×${ALCOHOL_QTY.Q1}) — 맥주 1캔 OR 소주 2~3잔 OR 와인 1잔`],
+      ["Q2", `중간 (×${ALCOHOL_QTY.Q2}) — 맥주 2캔 OR 소주 반병 OR 와인 2잔`],
+      ["Q3", `많음 (×${ALCOHOL_QTY.Q3}) — 맥주 3캔+ OR 소주 1병+ OR 와인 반병+`],
+    ],
+  };
+
+  const dateInput = document.getElementById('dateInput');
+  const dayNote = document.getElementById('dayNote');
+  const eventsWrap = document.getElementById('eventsWrap');
+  const addEventBtn = document.getElementById('addEventBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const clearDayBtn = document.getElementById('clearDayBtn');
+  const loadBtn = document.getElementById('loadBtn');
+  const quickBtn = document.getElementById('quickBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const exportBtn = document.getElementById('exportBtn');
+
+  const sumOut = document.getElementById('sumOut');
+  const penOut = document.getElementById('penOut');
+  const dlOut = document.getElementById('dlOut');
+  const zoneOut = document.getElementById('zoneOut');
+  const protocolOut = document.getElementById('protocolOut');
+
+  let state = { date: todayISO(), note:"", events:[] };
+  dateInput.value = state.date;
+
+  let rafPending = false;
+  function scheduleUpdate(){
+    if(rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(()=>{
+      rafPending = false;
+      render();
+      computeAndRender();
+    });
+  }
+
+  dateInput.addEventListener('change', () => {
+    state.note = dayNote.value || "";
+    saveDay(state.date);
+    state.date = dateInput.value;
+    loadDay(state.date, false);
+    if(state.events.length===0) addEvent();
+    scheduleUpdate();
+  });
+  dayNote.addEventListener('input', ()=>{ state.note = dayNote.value || ""; });
+  addEventBtn.addEventListener('click', ()=>{ addEvent(); scheduleUpdate(); });
+  saveBtn.addEventListener('click', ()=>{ saveDay(state.date); toast("저장 완료"); });
+  clearDayBtn.addEventListener('click', ()=>{
+    if(confirm("이 날짜 데이터를 삭제합니다. 진행합니까?")){
+      localStorage.removeItem(keyForDate(state.date));
+      state.note=""; state.events=[];
+      dayNote.value="";
+      addEvent(); scheduleUpdate();
+      toast("삭제 완료");
+    }
+  });
+  loadBtn.addEventListener('click', ()=>{ loadDay(state.date,false); if(state.events.length===0) addEvent(); scheduleUpdate(); toast("불러오기 완료"); });
+  quickBtn.addEventListener('click', ()=>{ scheduleUpdate(); toast("갱신 완료"); });
+
+  resetBtn.addEventListener('click', ()=>{
+    if(confirm("현재 날짜를 '빈 입력(이벤트 1개)' 상태로 초기화합니다. 진행합니까?")){
+      // 날짜/메모는 유지, 이벤트만 초기화
+      state.events = [defaultEvent()];
+      // defaultEvent를 빈 상태로 만들기 위해 주요 선택값 초기화
+      state.events[0].purpose = "P0"; // 일단 기본값 유지 후, 아래에서 비움 처리
+      // '선택 안 함' UX를 위해 빈 값 세팅 (렌더에서 placeholder 표시)
+      state.events[0].purpose = "";
+      state.events[0].base = "";
+      state.events[0].refine = "";
+      state.events[0].cooking = "";
+      state.events[0].sauceAmount = "";
+      state.events[0].sweet = "";
+      state.events[0].salty = "";
+      state.events[0].broth = "";
+      state.events[0].volume = "";
+      state.events[0].timing = "";
+      state.events[0].alcKind = "";
+      state.events[0].alcQty = "";
+      // sauceTypes는 '없음'으로
+      state.events[0].sauceTypes = { sugar:false, fat:false, salt:false, none:true };
+      // add-ons/flags 초기화
+      state.events[0].addP = 0; state.events[0].addC = 0; state.events[0].addF = 0;
+      state.events[0].isLiquid = false;
+      state.events[0].name = "";
+      saveDay(state.date);
+      scheduleUpdate();
+      toast("초기화 완료");
+    }
+  });
+  exportBtn.addEventListener('click', ()=>{ exportText(); });
+
+  loadDay(state.date, true);
+  if(state.events.length===0) addEvent();
+  scheduleUpdate();
+
+  function todayISO(){
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  }
+  function keyForDate(date){ return `LMRC_vFinal3_Matrix_${date}`; }
+  function clamp(n,a,b){ return Math.max(a, Math.min(b, Number(n)||0)); }
+
+  function defaultEvent(){
+    return {
+      name:"",
+      purpose:"P0",
+      base:"B1",
+      refine:"R2",
+      addP:0, addC:0, addF:0,
+      cooking:"C0",
+      sauceTypes:{ sugar:false, fat:false, salt:false, none:true },
+      sauceAmount:"L2",
+      sweet:0, salty:0, broth:"Bro0",
+      volume:"V1", isLiquid:false,
+      timing:"T1",
+      alcKind:"A0", alcQty:"Q0"
+    };
+  }
+  function addEvent(){ state.events.push(defaultEvent()); }
+  function removeEvent(idx){
+    state.events.splice(idx,1);
+    if(state.events.length===0) addEvent();
+    scheduleUpdate();
+  }
+
+  function selectFromOptions(value, options, onChange){
+    const sel=document.createElement('select');
+    if(value===undefined || value===null || value===''){
+      const ph=document.createElement('option');
+      ph.value=''; ph.textContent='선택하세요'; ph.disabled=true; ph.selected=true;
+      sel.appendChild(ph);
+    }
+    options.forEach(([v,t])=>{
+      const opt=document.createElement('option');
+      opt.value=String(v); opt.textContent=t;
+      sel.appendChild(opt);
+    });
+    sel.value=String(value);
+    sel.addEventListener('change', ()=>onChange(sel.value));
+    return sel;
+  }
+
+  function questionBlock(title, hintHTML, controlNode){
+    const wrap=document.createElement('div');
+    wrap.className="callout";
+    const t=document.createElement('div'); t.className="qTitle"; t.textContent=title;
+    const h=document.createElement('div'); h.className="qHint"; h.innerHTML=hintHTML;
+    wrap.appendChild(t); wrap.appendChild(h); wrap.appendChild(controlNode);
+    return wrap;
+  }
+
+  function fieldText(labelText, placeholder, value, onChange){
+    const wrap=document.createElement('div');
+    const lab=document.createElement('label'); lab.textContent=labelText;
+    const input=document.createElement('input'); input.type="text"; input.placeholder=placeholder; input.value=value||"";
+    input.addEventListener('input', ()=>{ onChange(input.value); });
+    wrap.appendChild(lab); wrap.appendChild(input);
+    return wrap;
+  }
+
+  function addonSelect(labelTxt, val, onChange){
+    const box=document.createElement('div'); box.style.flex="1"; box.style.minWidth="240px";
+    const lab=document.createElement('label'); lab.textContent=labelTxt + " (가산 +0~+3)";
+    const sel=document.createElement('select');
+    [
+      [0,"없음 (+0) — 거의 없음"],
+      [1,"소량 (+1) — 토핑/조금"],
+      [2,"보통 (+2) — 확실히 존재"],
+      [3,"많음 (+3) — 하나의 축"],
+    ].forEach(([v,t])=>{
+      const opt=document.createElement('option');
+      opt.value=String(v); opt.textContent=t;
+      sel.appendChild(opt);
+    });
+    sel.value=String(val||0);
+    sel.addEventListener('change', ()=>{ onChange(sel.value); scheduleUpdate(); });
+    box.appendChild(lab); box.appendChild(sel);
+    return box;
+  }
+
+  function chkChip(text, checked, onToggle){
+    const lab=document.createElement('label'); lab.className="chip";
+    const cb=document.createElement('input'); cb.type="checkbox"; cb.checked=!!checked;
+    cb.addEventListener('change', ()=>{ onToggle(cb.checked); scheduleUpdate(); });
+    const sp=document.createElement('span'); sp.textContent=text;
+    lab.appendChild(cb); lab.appendChild(sp);
+    return lab;
+  }
+
+  function toggleSauce(ev, key, checked){
+    if(key==="none" && checked){
+      ev.sauceTypes={ sugar:false, fat:false, salt:false, none:true };
+    } else {
+      ev.sauceTypes[key]=checked;
+      if(key!=="none" && checked) ev.sauceTypes.none=false;
+      if(!ev.sauceTypes.sugar && !ev.sauceTypes.fat && !ev.sauceTypes.salt){
+        ev.sauceTypes.none=true;
+      }
+    }
+  }
+
+  function sauceBlock(ev){
+    const wrap=document.createElement('div'); wrap.className="grid";
+
+    const types=document.createElement('div');
+    const lab=document.createElement('label');
+    lab.textContent="소스 종류(복수) — 소스점수 = (종류 수) × (양 계수)";
+    types.appendChild(lab);
+
+    const inline=document.createElement('div'); inline.className="row";
+    inline.appendChild(chkChip("고당 소스 (종류 +1)", ev.sauceTypes.sugar, x=>toggleSauce(ev,"sugar",x)));
+    inline.appendChild(chkChip("고지방 소스 (종류 +1)", ev.sauceTypes.fat, x=>toggleSauce(ev,"fat",x)));
+    inline.appendChild(chkChip("고염 소스 (종류 +1)", ev.sauceTypes.salt, x=>toggleSauce(ev,"salt",x)));
+    inline.appendChild(chkChip("소스 없음 (종류 0)", ev.sauceTypes.none, x=>toggleSauce(ev,"none",x)));
+    types.appendChild(inline);
+
+    const amt=document.createElement('div');
+    const lab2=document.createElement('label'); lab2.textContent="소스 양(계수)";
+    const sel=selectFromOptions(ev.sauceAmount, UI.sauceAmt, v=>{ ev.sauceAmount=v; scheduleUpdate(); });
+
+    if(ev.sauceTypes.none){
+      sel.disabled = true;
+      lab2.textContent = "소스 양(계수) — 소스 없음이면 적용 안 됨";
+    }
+
+    amt.appendChild(lab2); amt.appendChild(sel);
+
+    wrap.appendChild(types); wrap.appendChild(amt);
+    return wrap;
+  }
+
+  function volumeBlock(ev){
+    const wrap=document.createElement('div'); wrap.className="grid";
+
+    const selWrap=document.createElement('div');
+    const lab=document.createElement('label'); lab.textContent="섭취량(곱셈 VM)";
+    const sel=selectFromOptions(ev.volume, UI.volume, v=>{ ev.volume=v; scheduleUpdate(); });
+    selWrap.appendChild(lab); selWrap.appendChild(sel);
+
+    const liquid=document.createElement('div');
+    const lab2=document.createElement('label'); lab2.textContent="액상 보정";
+    const chip=document.createElement('label'); chip.className="chip";
+    const cb=document.createElement('input'); cb.type="checkbox"; cb.checked=!!ev.isLiquid;
+    cb.addEventListener('change', ()=>{ ev.isLiquid=cb.checked; scheduleUpdate(); });
+    const sp=document.createElement('span'); sp.textContent="쉐이크/음료/액상당 → 섭취량 1단계 상향";
+    chip.appendChild(cb); chip.appendChild(sp);
+    liquid.appendChild(lab2); liquid.appendChild(chip);
+
+    wrap.appendChild(selWrap); wrap.appendChild(liquid);
+    return wrap;
+  }
+
+  function volumeWithLiquid(v, isLiquid){
+    if(!isLiquid) return v;
+    if(v==="V0") return "V1";
+    if(v==="V1") return "V2";
+    if(v==="V2") return "V3";
+    return "V3";
+  }
+
+  function countSauceKinds(st){
+    if(!st || st.none) return 0;
+    let c=0;
+    if(st.sugar) c++;
+    if(st.fat) c++;
+    if(st.salt) c++;
+    return c;
+  }
+
+  function volumeLabel(vKey){
+    const map = { V0:"0.5인분 이하", V1:"1.0인분", V2:"1.5인분", V3:"2.0인분 이상" };
+    return map[vKey] || vKey;
+  }
+
+  function computeEvent(ev){
+    const base = BASE[ev.base] ?? 0;
+    const refine = (ev.base==="B1") ? (REFINE[ev.refine] ?? 0) : 0;
+    const addons = (ev.addP||0) + (ev.addC||0) + (ev.addF||0);
+    const cooking = COOK[ev.cooking] ?? 0;
+
+    const sauceKinds = countSauceKinds(ev.sauceTypes);
+    const sauceAmt = (sauceKinds===0) ? 0 : (SAUCE_AMOUNT[ev.sauceAmount] ?? 0);
+    const sauce = sauceKinds * sauceAmt;
+
+    const sweet = clamp(ev.sweet,0,3);
+    const salty = clamp(ev.salty,0,3);
+    const broth = BROTH[ev.broth] ?? 0;
+
+    const fcs = base + refine + addons + cooking + sauce + sweet + salty + broth;
+
+    const vKey = volumeWithLiquid(ev.volume, !!ev.isLiquid);
+    const vm = VM[vKey] ?? 1.0;
+    const tm = TM[ev.timing] ?? 1.0;
+    const pm = PM[ev.purpose] ?? 1.0;
+    const am = (ALCOHOL_KIND[ev.alcKind] ?? 1.0) * (ALCOHOL_QTY[ev.alcQty] ?? 1.0);
+
+    const mult = vm * tm * pm * am;
+    const score = fcs * mult;
+
+    return {
+      fcs, mult, score,
+      breakdown: { base, refine, addons, cooking, sauce, sweet, salty, broth, sauceKinds, sauceAmt },
+      mults: { vm, tm, pm, am, vKey }
+    };
+  }
+
+  function pickZone(dl){
+    for(const z of ZONES){ if(dl >= z.min && dl < z.max) return z.z; }
+    if(dl >= 50) return 7;
+    return 1;
+  }
+
+  function computeDaily(){
+    const scores = state.events.map(ev=>computeEvent(ev).score).filter(x=>isFinite(x));
+    const sum = scores.reduce((a,b)=>a+b,0);
+
+    let pen=0;
+    if(scores.length===2){
+      const s=[...scores].sort((a,b)=>a-b);
+      pen = 0.15*s[0];
+    } else if(scores.length>=3){
+      const s=[...scores].sort((a,b)=>a-b);
+      if(s.length===3){
+        pen = 0.30*(s[0]+s[1]);
+      } else {
+        const second=s[1];
+        const included=s.filter(x=>x<=second);
+        pen = 0.30*included.reduce((a,b)=>a+b,0);
+      }
+    }
+
+    const dl=sum+pen;
+    const zone=pickZone(dl);
+    const alc = summarizeAlcohol(state.events);
+    return { sum, pen, dl, zone, alc };
+  }
+
+  // ===== Matrix protocol =====
+  function summarizeAlcohol(events){
+    let kind = "A0";
+    let qty  = "Q0";
+    for(const ev of events){
+      if(ev.alcKind && ev.alcKind !== "A0"){
+        if(priorityKind(ev.alcKind) > priorityKind(kind)) kind = ev.alcKind;
+      }
+      if(ev.alcQty && ev.alcQty !== "Q0"){
+        if(priorityQty(ev.alcQty) > priorityQty(qty)) qty = ev.alcQty;
+      }
+    }
+    if(kind==="A0" || qty==="Q0") return null;
+    return { kind, qty };
+  }
+  function priorityKind(k){ return (k==="A3")?3:(k==="A2")?2:(k==="A1")?1:0; }
+  function priorityQty(q){ return (q==="Q3")?3:(q==="Q2")?2:(q==="Q1")?1:0; }
+
+  function zoneBand(z){
+    if(z<=2) return "Z12";
+    if(z===3) return "Z3";
+    if(z===4) return "Z4";
+    if(z===5 || z===6) return "Z56";
+    return "Z7";
+  }
+  function kindGroup(alcKind){
+    if(!alcKind) return "A0";
+    if(alcKind==="A1" || alcKind==="A3") return "A13";
+    if(alcKind==="A2") return "A2";
+    return "A0";
+  }
+
+  function alcoholKindText(kg){
+    if(kg==="A13") return "발효주/당류혼합주(맥주·막걸리·와인·칵테일/달달한 술)";
+    if(kg==="A2")  return "증류주(소주·위스키·보드카)";
+    return "술 없음";
+  }
+  function alcoholQtyText(q){
+    if(q==="Q1") return "적음(맥주 1캔 / 소주 2~3잔 / 와인 1잔)";
+    if(q==="Q2") return "중간(맥주 2캔 / 소주 반병 / 와인 2잔)";
+    if(q==="Q3") return "많음(맥주 3캔+ / 소주 1병+ / 와인 반병+)";
+    return "없음";
+  }  
+  function protocolFromMatrix(zone, alc){
+    const z = zone;
+
+    function kg(k){
+      if(!k) return "A0";
+      if(k==="A1"||k==="A3") return "A13";
+      if(k==="A2") return "A2";
+      return "A0";
+    }
+    function qg(q){
+      if(q==="Q1") return "Q1";
+      if(q==="Q2"||q==="Q3") return "Q23";
+      return "Q0";
+    }
+
+    // ===== A0 (음식만) =====
+    if(!alc){
+      if(z<=1) return { title:"Zone 1 · 술 없음", fast:"16시간 단식", meal:"평소 식사 및 횟수 유지", extra:[] };
+      if(z===2) return { title:"Zone 2 · 술 없음", fast:"16시간 단식", meal:"식사 횟수 2번 제한, 1끼 저탄수 + 1끼 평소 식단", extra:[] };
+      if(z===3) return { title:"Zone 3 · 술 없음", fast:"18시간 단식", meal:"식사 횟수 2번 제한, 1끼 무탄수 + 1끼 저탄수", extra:[] };
+      if(z===4) return { title:"Zone 4 · 술 없음", fast:"20시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(z===5) return { title:"Zone 5 · 술 없음", fast:"22시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(z===6) return { title:"Zone 6 · 술 없음", fast:"24시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      return { title:"Zone 7 · 술 없음", fast:"36시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+    }
+
+    const K = kg(alc.kind);
+    const Q = qg(alc.qty);
+
+    // ===== Zone 1 =====
+    if(z===1){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 1 · 술 있음", fast:"18시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 1 · 술 있음", fast:"20시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 1 · 술 있음", fast:"16시간 단식", meal:"평소 식사 횟수 유지, 1끼 저탄수", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 1 · 술 있음", fast:"18시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+    }
+
+    // ===== Zone 2 =====
+    if(z===2){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 2 · 술 있음", fast:"19시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 2 · 술 있음", fast:"21시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 2 · 술 있음", fast:"17시간 단식", meal:"식사 횟수 2번 제한, 1끼 저탄수 + 1끼 평소", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 2 · 술 있음", fast:"19시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+    }
+
+    // ===== Zone 3 =====
+    if(z===3){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 3 · 술 있음", fast:"20시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 3 · 술 있음", fast:"22시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 3 · 술 있음", fast:"18시간 단식", meal:"식사 횟수 2번 제한, 1끼 무탄수 + 1끼 저탄수", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 3 · 술 있음", fast:"20시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+    }
+
+    // ===== Zone 4 =====
+    if(z===4){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 4 · 술 있음", fast:"22시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 4 · 술 있음", fast:"24시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 4 · 술 있음", fast:"20시간 단식", meal:"식사 횟수 2번 제한, 모두 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 4 · 술 있음", fast:"22시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+    }
+
+    // ===== Zone 5 =====
+    if(z===5){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 5 · 술 있음", fast:"26시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 5 · 술 있음", fast:"32시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 5 · 술 있음", fast:"24시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 5 · 술 있음", fast:"28시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+    }
+
+    // ===== Zone 6 =====
+    if(z===6){
+      if(K==="A13" && Q==="Q1")  return { title:"Zone 6 · 술 있음", fast:"30시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A13" && Q==="Q23") return { title:"Zone 6 · 술 있음", fast:"36시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q1")  return { title:"Zone 6 · 술 있음", fast:"26시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2"  && Q==="Q23") return { title:"Zone 6 · 술 있음", fast:"32시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+    }
+
+    // ===== Zone 7 =====
+    if(z>=7){
+      if(K==="A13") return { title:"Zone 7 · 술 있음", fast:"48시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+      if(K==="A2")  return { title:"Zone 7 · 술 있음", fast:"42시간 단식", meal:"식사 횟수 1번 제한, 무탄수", extra:[] };
+    }
+
+    return { title:"결과 산출 오류", fast:"-", meal:"-", extra:[] };
+  }
+
+  function render(){
+    dayNote.value = state.note || "";
+    eventsWrap.innerHTML = "";
+
+    state.events.forEach((ev, idx)=>{
+      const card=document.createElement('div');
+      card.className="card";
+
+      const header=document.createElement('div');
+      header.className="eventHeader";
+      header.innerHTML = `
+        <div>
+          <div class="eventTitle">음식(이벤트) ${idx+1} <span class="tag">음식 1종 단위</span></div>
+          <div class="qHint" style="margin:6px 0 0;">예: 피자 + 치킨 → 이벤트 2개로 분리</div>
+        </div>
+        <button class="btn danger" type="button">삭제</button>
+      `;
+      header.querySelector('button').addEventListener('click', ()=>removeEvent(idx));
+      card.appendChild(header);
+
+      card.appendChild(fieldText("음식 이름(기록용)", "예: 라면, 피자, 치킨…", ev.name, v=>ev.name=v));
+
+      card.appendChild(questionBlock(
+        "Q1. 식사 대체인가요, 추가 섭취인가요?",
+        "식사 대체=이 음식으로 끼니 종료 / 추가 섭취=식사 후 더 먹음",
+        selectFromOptions(ev.purpose, UI.purpose, v=>{ ev.purpose=v; scheduleUpdate(); })
+      ));
+
+      card.appendChild(questionBlock(
+        "Q2. 기반(가장 큰 덩어리)은 무엇인가요?",
+        "가장 큰 매트릭스 기준. 피자/버거/정식=탄수 기반으로 시작하는 경우가 많음.",
+        selectFromOptions(ev.base, UI.base, v=>{ ev.base=v; scheduleUpdate(); })
+      ));
+
+      const refineBlock = questionBlock(
+        "Q3. (탄수 기반일 때만) 탄수 정제도는?",
+        "흰쌀/식빵/면/도우=정제. 도넛/케이크/설탕음료/액상당=초정제.",
+        selectFromOptions(ev.refine, UI.refine, v=>{ ev.refine=v; scheduleUpdate(); })
+      );
+      refineBlock.classList.toggle("hide", ev.base!=="B1");
+      card.appendChild(refineBlock);
+
+      card.appendChild(questionBlock(
+        "Q4. 추가 성분(Add-ons) 강도는?",
+        "0=없음, 1=토핑, 2=확실히 존재, 3=하나의 축 (각각 가산으로 합산)",
+        (function(){
+          const wrap=document.createElement('div'); wrap.className="row";
+          wrap.appendChild(addonSelect("단백질 추가", ev.addP, v=>{ ev.addP=Number(v); }));
+          wrap.appendChild(addonSelect("탄수 추가", ev.addC, v=>{ ev.addC=Number(v); }));
+          wrap.appendChild(addonSelect("지방 추가", ev.addF, v=>{ ev.addF=Number(v); }));
+          return wrap;
+        })()
+      ));
+
+      card.appendChild(questionBlock(
+        "Q5. 조리 방식은?",
+        "튀김 옷 두꺼울수록 점수 상승.",
+        selectFromOptions(ev.cooking, UI.cooking, v=>{ ev.cooking=v; scheduleUpdate(); })
+      ));
+
+      card.appendChild(questionBlock(
+        "Q6. 소스(종류 + 양)",
+        "소스 점수 = (선택한 소스 종류 수) × (양 계수). 소스 없음이면 양은 적용 안 됨.",
+        sauceBlock(ev)
+      ));
+
+      card.appendChild(questionBlock(
+        "Q7. 당도/염도/국물",
+        "변경 즉시 분해표가 바로 갱신됩니다.",
+        (function(){
+          const wrap=document.createElement('div'); wrap.className="row";
+
+          const box1=document.createElement('div'); box1.style.flex="1"; box1.style.minWidth="240px";
+          const l1=document.createElement('label'); l1.textContent="당도(가산)";
+          const sweetSel = selectFromOptions(ev.sweet, UI.sweet.map(([v,t])=>[v,t]), v=>{ ev.sweet=Number(v); scheduleUpdate(); });
+          box1.appendChild(l1); box1.appendChild(sweetSel);
+
+          const box2=document.createElement('div'); box2.style.flex="1"; box2.style.minWidth="240px";
+          const l2=document.createElement('label'); l2.textContent="염도(가산)";
+          const saltySel = selectFromOptions(ev.salty, UI.salty.map(([v,t])=>[v,t]), v=>{ ev.salty=Number(v); scheduleUpdate(); });
+          box2.appendChild(l2); box2.appendChild(saltySel);
+
+          const box3=document.createElement('div'); box3.style.flex="1"; box3.style.minWidth="240px";
+          const l3=document.createElement('label'); l3.textContent="국물(가산)";
+          const brothSel = selectFromOptions(ev.broth, UI.broth, v=>{ ev.broth=v; scheduleUpdate(); });
+          box3.appendChild(l3); box3.appendChild(brothSel);
+
+          wrap.appendChild(box1); wrap.appendChild(box2); wrap.appendChild(box3);
+          return wrap;
+        })()
+      ));
+
+      card.appendChild(questionBlock(
+        "Q8. 섭취량(Volume)",
+        "액상이면 ‘액상 보정’ 체크(섭취량 1단계 상향).",
+        volumeBlock(ev)
+      ));
+
+      card.appendChild(questionBlock(
+        "Q9. 시간대",
+        "야식일수록 계수 증가.",
+        selectFromOptions(ev.timing, UI.timing, v=>{ ev.timing=v; scheduleUpdate(); })
+      ));
+
+      card.appendChild(questionBlock(
+        "Q10. 술(종류 + 양)",
+        "술이 있으면 ‘오늘 최종 조치’는 매트릭스 기준으로 완전히 전환됩니다.",
+        (function(){
+          const wrap=document.createElement('div'); wrap.className="row";
+
+          const kind=document.createElement('div'); kind.style.flex="1"; kind.style.minWidth="320px";
+          const qty=document.createElement('div'); qty.style.flex="1"; qty.style.minWidth="420px";
+          const lk=document.createElement('label'); lk.textContent="술 종류";
+          const lq=document.createElement('label'); lq.textContent="술 양";
+
+          const kindSel=selectFromOptions(ev.alcKind, UI.alcKind, v=>{
+            ev.alcKind=v;
+            if(ev.alcKind==="A0") ev.alcQty="Q0";
+            scheduleUpdate();
+          });
+          const qtySel=selectFromOptions(ev.alcQty, UI.alcQty, v=>{
+            ev.alcQty=v;
+            if(ev.alcQty==="Q0") ev.alcKind="A0";
+            scheduleUpdate();
+          });
+
+          kind.appendChild(lk); kind.appendChild(kindSel);
+          qty.appendChild(lq); qty.appendChild(qtySel);
+          wrap.appendChild(kind); wrap.appendChild(qty);
+          return wrap;
+        })()
+      ));
+
+      const c=computeEvent(ev);
+      const pre=document.createElement('div');
+      pre.className="callout";
+      pre.style.marginTop="12px";
+      pre.innerHTML = `
+        <div class="qTitle">이 이벤트 점수 분해(검증용)</div>
+        <div class="qHint">FCS(가산)와 촉매(곱셈)를 분리해서 표시합니다.</div>
+
+        <div class="kpi"><span>FCS 합</span><strong class="mono">${c.fcs.toFixed(2)}</strong></div>
+        <table class="miniTable">
+          <tr><td>베이스</td><td class="mono">+${c.breakdown.base}</td></tr>
+          <tr><td>정제도(탄수 기반일 때만)</td><td class="mono">+${c.breakdown.refine}</td></tr>
+          <tr><td>Add-ons 합</td><td class="mono">+${c.breakdown.addons}</td></tr>
+          <tr><td>조리</td><td class="mono">+${c.breakdown.cooking}</td></tr>
+          <tr><td>소스 = (종류 ${c.breakdown.sauceKinds}) × (양 ${c.breakdown.sauceAmt})</td><td class="mono">+${c.breakdown.sauce}</td></tr>
+          <tr><td>당도</td><td class="mono">+${c.breakdown.sweet}</td></tr>
+          <tr><td>염도</td><td class="mono">+${c.breakdown.salty}</td></tr>
+          <tr><td>국물</td><td class="mono">+${c.breakdown.broth}</td></tr>
+        </table>
+
+        <div class="split"></div>
+
+        <div class="kpi"><span>촉매 계수</span><strong class="mono">${c.mult.toFixed(4)}</strong></div>
+        <table class="miniTable">
+          <tr><td>VM (${volumeLabel(c.mults.vKey)})</td><td class="mono">×${c.mults.vm}</td></tr>
+          <tr><td>TM</td><td class="mono">×${c.mults.tm}</td></tr>
+          <tr><td>PM</td><td class="mono">×${c.mults.pm}</td></tr>
+          <tr><td>AM</td><td class="mono">×${c.mults.am.toFixed(4)}</td></tr>
+        </table>
+
+        <div class="split"></div>
+        <div class="kpi"><span>EventScore = FCS × 촉매</span><strong class="mono">${c.score.toFixed(2)}</strong></div>
+      `;
+      card.appendChild(pre);
+
+      eventsWrap.appendChild(card);
+    });
+  }
+
+  function computeAndRender(){
+    const r=computeDaily();
+
+    sumOut.textContent=r.sum.toFixed(2);
+    penOut.textContent=r.pen.toFixed(2);
+    dlOut.textContent=r.dl.toFixed(2);
+
+    zoneOut.textContent=`Zone ${r.zone}`;
+    zoneOut.className=`zoneBadge z${r.zone}`;
+
+    const p = protocolFromMatrix(r.zone, r.alc);
+
+    protocolOut.className="callout";
+    if(r.zone<=2) protocolOut.classList.add("okBox");
+    else if(r.zone<=4) protocolOut.classList.add("warnBox");
+    else protocolOut.classList.add("badBox");
+
+    const extraHTML = (p.extra && p.extra.length)
+      ? `<div class="split"></div><div class="qHint"><b>알코올 포함 시 추가 절대 수칙</b><br><br>${p.extra.map(x=>`• ${x}`).join("<br>")}</div>`
+      : "";
+
+    protocolOut.innerHTML = `
+      <div class="qTitle">오늘 최종 조치</div>
+      <div class="qHint">${p.title}</div>
+      <div class="kpi"><span>단식 시간</span><strong>${p.fast}</strong></div>
+      <div class="kpi"><span>식사 조치</span><strong>${p.meal}</strong></div>
+      ${extraHTML}
+    `;
+  }
+
+  function saveDay(date){
+    const payload = JSON.stringify({ date, note: state.note||"", events: state.events });
+    localStorage.setItem(keyForDate(date), payload);
+  }
+  function loadDay(date, silent){
+    const raw = localStorage.getItem(keyForDate(date));
+    if(!raw){ if(!silent) toast("저장된 데이터 없음"); state.note=""; state.events=[]; return; }
+    try{
+      const obj=JSON.parse(raw);
+      state.note=obj.note||"";
+      state.events=Array.isArray(obj.events)?obj.events:[];
+      dayNote.value=state.note||"";
+    }catch(e){
+      if(!silent) alert("불러오기 실패(데이터 손상 가능).");
+      state.note=""; state.events=[];
+    }
+  }
+
+  function exportText(){
+    const r=computeDaily();
+    const lines=[];
+    lines.push(`LeanMassRecovery vFinal.3 Matrix`);
+    lines.push(`Date: ${state.date}`);
+    if(state.note) lines.push(`Note: ${state.note}`);
+    lines.push(`Sum ${r.sum.toFixed(2)} / Pen ${r.pen.toFixed(2)} / DailyLoad ${r.dl.toFixed(2)} / Zone ${r.zone}`);
+    lines.push(`Alcohol: ${r.alc ? (alcoholKindText(kindGroup(r.alc.kind)) + ' / ' + alcoholQtyText(r.alc.qty)) : '술 없음'}`);
+    const p = protocolFromMatrix(r.zone, r.alc);
+    lines.push(`Action: ${p.title} | Fast=${p.fast} | Meal=${p.meal}`);
+    if(p.extra && p.extra.length) lines.push(`Rules: ${p.extra.join(" / ")}`);
+    state.events.forEach((ev,i)=>{
+      const c=computeEvent(ev);
+      lines.push(`#${i+1} ${ev.name||"(이름없음)"}: ${c.score.toFixed(2)} (FCS ${c.fcs.toFixed(2)} × ${c.mult.toFixed(4)})`);
+    });
+    const text=lines.join("\n");
+    if(navigator.share){ navigator.share({title:"LMRC Export", text}).catch(()=>copyToClipboard(text)); }
+    else copyToClipboard(text);
+    toast("내보내기 완료");
+  }
+
+  function copyToClipboard(text){
+    try{ navigator.clipboard.writeText(text); }
+    catch(e){
+      const ta=document.createElement('textarea');
+      ta.value=text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
+  }
+
+  function toast(msg){
+    const t=document.createElement('div');
+    t.textContent=msg;
+    t.style.position="fixed"; t.style.left="50%"; t.style.bottom="86px"; t.style.transform="translateX(-50%)";
+    t.style.padding="10px 12px"; t.style.background="#111827"; t.style.color="#fff"; t.style.borderRadius="12px";
+    t.style.fontSize="13px"; t.style.zIndex="9999"; t.style.boxShadow="0 10px 30px rgba(17,24,39,0.22)";
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.style.opacity="0"; t.style.transition="opacity 280ms"; }, 1200);
+    setTimeout(()=>{ t.remove(); }, 1600);
+  }
+
+})();
+</script>
+</body>
+</html>
