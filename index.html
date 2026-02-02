@@ -76,7 +76,34 @@
   
   #loadBtn, #exportBtn { display:none !important; }
   #quickBtn { display:none !important; }
-</style>
+
+    /* ===== Mobile fixes (iOS Safari) ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { width: 100%; overflow-x: hidden; }
+    input, select, textarea, button { max-width: 100%; }
+
+    /* iOS zoom 방지: 폰트는 16px 유지 */
+    input[type="text"],
+    input[type="date"],
+    select,
+    textarea {
+      font-size: 16px !important;
+      padding: 10px 12px;
+      line-height: 1.2;
+    }
+
+    /* 카드 중앙 정렬 보정 */
+    .card { margin-left: auto !important; margin-right: auto !important; width: 100%; }
+
+    /* 모바일에서 row는 세로 스택 + min-width 무력화 */
+    @media (max-width: 480px) {
+      .row { flex-direction: column !important; align-items: stretch !important; gap: 10px; }
+      .row > div { min-width: 0 !important; width: 100% !important; }
+      .chip { min-width: 0 !important; width: 100% !important; }
+      main { padding-left: 14px; padding-right: 14px; }
+    }
+
+  </style>
 </head>
 <body>
 <header>
