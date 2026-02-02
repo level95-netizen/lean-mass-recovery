@@ -102,6 +102,17 @@
       .chip { min-width: 0 !important; width: 100% !important; }
       main { padding-left: 14px; padding-right: 14px; }
     }
+/* 날짜칸(iPhone) 오른쪽 삐져나옴 방지 */
+input[type="date"]{
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  background-clip: padding-box;
+}
+.card{ overflow:hidden; }
 
   </style>
 </head>
